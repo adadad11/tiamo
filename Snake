@@ -1,0 +1,94 @@
+import pygame
+import random
+
+# 初始化 Pygame
+pygame.init()
+
+# 游戏窗口的大小
+WINDOW_WIDTH = 600
+WINDOW_HEIGHT = 600
+
+# 定义颜色
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+
+# 创建游戏窗口
+screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+pygame.display.set_caption('Snake Game')
+
+# 定义贪吃蛇的初始位置、大小和速度
+SNAKE_SIZE = 10
+SNAKE_SPEED = 15
+snake_pos = [300, 300]
+snake_body = [[300, 300], [290, 300], [280, 300]]
+direction = "RIGHT"
+
+# 定义食物的初始位置
+food_pos = [random.randrange(1, (WINDOW_WIDTH//10)) * 10, 
+            random.randrange(1, (WINDOW_HEIGHT//10)) * 10]
+
+# 绘制贪吃蛇和食物的函数
+def draw_snake(snake_body):
+    for pos in snake_body:
+        pygame.draw.rect(screen, WHITE, pygame.Rect(pos[0], pos[1], SNAKE_SIZE, SNAKE_SIZE))
+
+def draw_food(food_pos):
+    pygame.draw.rect(screen, GREEN, pygame.Rect(food_pos[0], food_pos[1], SNAKE_SIZE, SNAKE_SIZE))
+
+# 游戏循环
+while True:
+    # 处理事件
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP and direction != "DOWN":
+                direction = "UP"
+            elif event.key == pygame.K_DOWN and direction != "UP":
+                direction = "DOWN"
+            elif event.key == pygame.K_LEFT and direction != "RIGHT":
+                direction = "LEFT"
+            elif event.key == pygame.K_RIGHT and direction != "LEFT":
+                direction = "RIGHT"
+
+    # 移动贪吃蛇
+    if direction == "UP":
+        snake_pos[1] -= SNAKE_SIZE
+    elif direction == "DOWN":
+        snake_pos[1] += SNAKE_SIZE
+    elif direction == "LEFT":
+        snake_pos[0] -= SNAKE_SIZE
+    elif direction == "RIGHT":
+        snake_pos[0] += SNAKE_SIZE
+
+    # 更新贪吃蛇的身体
+    snake_body.insert(0, list(snake_pos))
+    if snake_pos == food_pos:
+        food_pos = [random.randrange(1, (WINDOW_WIDTH//10)) * 10, 
+                    random.randrange(1, (WINDOW_HEIGHT//10)) * 10]
+    else:
+        snake_body.pop()
+
+    # 绘制游戏界面
+    screen.fill(BLACK)
+    draw_snake(snake_body)
+    draw_food(food_pos)
+    pygame.display.update()
+
+    # 判断游戏结束
+    if snake_pos[0] < 0 or snake_pos[0] > WINDOW_WIDTH-SNAKE_SIZE:
+        pygame.quit()
+        quit()
+    elif snake_pos[1] < 0 or snake_pos[    pygame.quit()
+    quit()
+for block in snake_body[1:]:
+    if snake_pos == block:
+        pygame.quit()
+        quit()
+
+# 控制游戏速度
+pygame.time.Clock().tick(SNAKE_SPEED)
+
